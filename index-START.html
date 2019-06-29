@@ -21,7 +21,28 @@ const cities = [];
 fetch(endpoint)
 .then(data => data.json())
 //.then(jsondata => console.log(jsondata))
-.then(jsondata => cities.push(...data)) //using es6 spread, so that the json array is entered 'spread' as each own separate entity
+.then(jsondata => cities.push(...jsondata)) //using es6 spread, so that the json array is entered 'spread' as each own separate entity
+
+function findMatches(wordToMatch, cities) {
+  return cities.filter(place => { //run findMatches('Bos', cities) in console
+    //here we need to figure out if the city/state matches what was searched
+    // have to create a variable for regex. g is global, i is uppercase/lowercase (insensitive)
+    const regex = new RegExp(wordToMatch, 'gi')
+    return place.city.match(regex) || place.state.match(regex)
+  })
+}
+
+
+function displayMatches() {
+  console.log(this.value);
+}
+
+const searchInput = document.querySelector('.search') //target class search
+const suggestions = document.querySelector('.suggestions') //target class suggestion
+
+//listening for a change in searchinput '.search', when it changes, run displayMatches function
+searchInput.addEventListener('change', displayMatches);
+
 
 </script>
 </body>
