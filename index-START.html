@@ -32,9 +32,34 @@ function findMatches(wordToMatch, cities) {
   })
 }
 
+//regex function to add commas to number
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
 
 function displayMatches() {
   console.log(this.value);
+  const matchArray = findMatches(this.value, cities);
+  console.log(matchArray)
+  const html = matchArray.map(place => {
+
+    //highlight word function
+
+    const regex = new RegExp(this.value, 'gi');
+    const cityName = place.city.replace(regex, `<span class="highlight">${this.value}</span>`) //replace whatever the regex matches with
+    const stateName = place.state.replace(regex, `<span class="highlight">${this.value}</span>`) //replace whatever the regex matches with
+
+    //replacing place.city with cityName and place.state with stateName in the below spans
+    return `
+    <li>
+      <span class="name">${cityName}, ${stateName}</span>
+      <span class="population">${numberWithCommas(place.population)}</span>
+    </li>
+    `
+  }).join(''); //need to change from array 
+
+  //once mapped:
+  suggestions.innerHTML = html;
 }
 
 const searchInput = document.querySelector('.search') //target class search
@@ -42,7 +67,7 @@ const suggestions = document.querySelector('.suggestions') //target class sugges
 
 //listening for a change in searchinput '.search', when it changes, run displayMatches function
 searchInput.addEventListener('change', displayMatches);
-
+searchInput.addEventListener('keyup', displayMatches);
 
 </script>
 </body>
